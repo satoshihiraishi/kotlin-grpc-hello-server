@@ -11,6 +11,7 @@ val grpcVersion = "1.58.0"
 val grpcKotlinVersion = "1.4.0"
 val protobufVersion = "3.24.3"
 val coroutinesVersion = "1.7.3"
+val junitJupiterVersion = "5.9.2"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.10"
@@ -31,7 +32,7 @@ dependencies {
     // Use the Kotlin JUnit 5 integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     // Use the JUnit 5 integration.
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
@@ -40,8 +41,8 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     implementation("io.grpc:grpc-protobuf:$grpcVersion")
     implementation("io.grpc:grpc-netty-shaded:$grpcVersion")
-    implementation("com.google.protobuf:protobuf-kotlin:3.24.3") // x.y.z は適切なバージョンに置き換えてください。
-
+    implementation("com.google.protobuf:protobuf-kotlin:3.24.3")
+    implementation("io.grpc:grpc-netty-shaded:1.58.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -60,11 +61,6 @@ application {
     // Define the main class for the application.
     // mainClass.set("grpc.kotlin.AppKt")
     mainClass.set("io.grpc.examples.hello.HelloServer")
-}
-
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
 }
 
 protobuf {
@@ -108,8 +104,13 @@ sourceSets {
     }
 }
 
-// shadowJar {
-//     archiveBaseName.set("hello-server")
-//     archiveVersion.set("0.1.0")
-//     archiveClassifier.set("")
-// }
+tasks.shadowJar {
+    archiveBaseName.set("hello-server")
+    archiveVersion.set("0.1.0")
+    archiveClassifier.set("")
+}
+
+tasks.named<Test>("test") {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
