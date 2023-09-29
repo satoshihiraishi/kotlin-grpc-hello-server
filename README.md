@@ -10,4 +10,7 @@ kotlin grpc test server
 
 ### execute
 ./gradlew run
-``````
+```
+
+## サーバー起動後
+別のクライアント　or　PostmanでgRPC接続する。
